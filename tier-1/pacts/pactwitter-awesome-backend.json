@@ -1,0 +1,112 @@
+{
+  "consumer": {
+    "name": "pactwitter"
+  },
+  "interactions": [
+    {
+      "description": "a request to create a post",
+      "providerStates": [
+        {
+          "name": "no posts"
+        }
+      ],
+      "request": {
+        "body": {
+          "content": "Hello, Pact!"
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "POST",
+        "path": "/posts"
+      },
+      "response": {
+        "body": {},
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "status": 201
+      }
+    },
+    {
+      "description": "a request for posts",
+      "providerStates": [
+        {
+          "name": "posts exist"
+        }
+      ],
+      "request": {
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "method": "GET",
+        "path": "/posts"
+      },
+      "response": {
+        "body": [
+          {
+            "content": "Hello, Pact!",
+            "id": "e2490de5-5bd3-43d5-b7c4-526e33f71304"
+          }
+        ],
+        "generators": {
+          "body": {
+            "$[*].id": {
+              "type": "Uuid"
+            }
+          }
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        },
+        "matchingRules": {
+          "body": {
+            "$": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type",
+                  "min": 1
+                }
+              ]
+            },
+            "$[*].content": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "type"
+                }
+              ]
+            },
+            "$[*].id": {
+              "combine": "AND",
+              "matchers": [
+                {
+                  "match": "regex",
+                  "regex": "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}"
+                }
+              ]
+            }
+          },
+          "status": {}
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.4.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.19",
+      "models": "1.1.19"
+    },
+    "pactSpecification": {
+      "version": "3.0.0"
+    }
+  },
+  "provider": {
+    "name": "awesome-backend"
+  }
+}
