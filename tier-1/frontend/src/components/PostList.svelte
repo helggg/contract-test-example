@@ -1,14 +1,19 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { apiClient, type Post } from '../api/api-client';
+
 	let posts: Post[] = [];
+	let loading = true;
+
 	async function loadPosts() {
 		try {
 			posts = await apiClient.getPosts();
 		} catch (error) {
 			console.error('Failed to load posts:', error);
 		}
+		loading = false;
 	}
+
 	onMount(() => {
 		loadPosts();
 		window.addEventListener('refreshPosts', loadPosts);
@@ -18,11 +23,13 @@
 	});
 </script>
 
-{#each posts as post}
-	<div class="post">{post.content}</div>
-{:else}
+{#if loading}
 	<p>Loading...</p>
-{/each}
+{:else if posts.length > 0}
+	{#each posts as post}
+		<div class="post" id={post.id}>{post.content}</div>
+	{/each}
+{/if}
 
 <style>
 	.post {

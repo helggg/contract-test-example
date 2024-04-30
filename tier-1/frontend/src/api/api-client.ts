@@ -52,7 +52,7 @@ export class ApiClient {
 	}
 
 	async createPost(content: string): Promise<void> {
-		await this.post<{ content: string }, void>('/posts', { content });
+		return this.post<{ content: string }, void>('/posts', { content });
 	}
 }
 

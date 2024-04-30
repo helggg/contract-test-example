@@ -12,6 +12,7 @@ from main import app, posts
 PACT_FILE_URL = os.path.join(os.path.dirname(__file__), "../../pacts", "pactwitter-awesome-backend.json")
 SERVICE_HOST = "localhost"
 SERVICE_PORT = 8000
+
 HANDLER_STATE_URI = "/_pact/provider_states"
 
 class ProviderState(BaseModel):
@@ -21,7 +22,7 @@ class ProviderState(BaseModel):
 @app.post(HANDLER_STATE_URI)
 def service_state_mapping(state: ProviderState):
     state_mapping = {
-        "posts exist": lambda: posts.append({"id": f"{uuid4()}", "content": "Hello, World!"}),
+        "posts exist": lambda: posts.append({"id": f"{uuid4()}", "content": "Hello, World!", "date": "2021-01-01"}),
         "no posts": lambda: posts.clear()
     }
     state_mapping[state.state]()

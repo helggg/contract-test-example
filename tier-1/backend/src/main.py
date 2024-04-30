@@ -13,6 +13,7 @@ class NewPost(BaseModel):
 class Post(BaseModel):
     id: str
     content: str
+    date: str
 
 posts: List[Post] = []
 
@@ -35,7 +36,7 @@ async def read_posts():
 
 @app.post("/posts", status_code=201)
 async def create_post(post: NewPost):
-    post = Post(id=str(uuid4()), content=post.content)
+    post = Post(id=str(uuid4()), content=post.content, date="2021-01-01")
     posts.append(post)
     return {"message": "Post added successfully"}
 
